@@ -39,18 +39,10 @@ jobs:
       - run: npm run build
       - run: npm pack
 
-      - name: Configure npm auth for publish
-        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish to npm
+      - name: Publish to npm (Trusted Publisher / OIDC)
         run: npm publish --provenance --access public --registry https://registry.npmjs.org
 
       - name: Attach tarball to release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: '*.tgz'
+        run: gh release upload "${{ github.event.release.tag_name }}" *.tgz --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
