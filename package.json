@@ -12,7 +12,10 @@
       "default": "./dist/rpmbuild.js"
     }
   },
-  "files": ["dist", "spec"],
+  "files": [
+    "dist",
+    "spec"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -28,6 +31,9 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "vitest": "^4.0.18"
+  },
+  "overrides": {
+    "why-is-node-running": "3.2.2"
   }
 }

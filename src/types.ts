@@ -24,6 +24,9 @@ export interface BuildOptions {
   cwd?: string;
   rpmRootDir?: string;
   buildArch?: string;
+  /** Path to a custom spec file (relative to `cwd` or absolute). Same placeholders as built-in: {{name}}, {{version}}, etc. */
+  specFile?: string;
+  /** Inline spec template string. Ignored if `specFile` is set. */
   specTemplate?: string;
   verbose?: boolean;
 }

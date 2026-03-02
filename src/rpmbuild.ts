@@ -85,9 +85,12 @@ export class RpmBuilder extends EventEmitter {
 
     const spec = createRpmSpec(opts);
     const cwd = xutil.resolve(opts.cwd ?? ".");
+    const specTemplate = opts.specFile
+      ? fs.readFileSync(path.resolve(cwd, opts.specFile), "utf8")
+      : (opts.specTemplate ?? SPEC_TEMPLATE);
     return {
       spec,
-      specTemplate: opts.specTemplate ?? SPEC_TEMPLATE,
+      specTemplate,
       buildArch: opts.buildArch ?? "noarch",
       installScript: opts.installScript ?? [],
       cwd,

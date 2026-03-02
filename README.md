@@ -93,7 +93,8 @@ Builds an RPM. Options:
 | `cwd`           | string?  | Working directory for globs (default: .) |
 | `rpmRootDir`    | string?  | rpmbuild top dir (default: ~/rpmbuild) |
 | `buildArch`     | string?  | e.g. noarch (default) |
-| `specTemplate`  | string?  | Custom spec template |
+| `specFile`       | string?  | Path to a custom spec file (relative to `cwd` or absolute). Same placeholders as built-in: `{{name}}`, `{{version}}`, `{{files}}`, etc. |
+| `specTemplate`  | string?  | Inline spec template string (ignored if `specFile` is set) |
 | `verbose`       | boolean? | Log rpmbuild output |
 
 Returned `BuildContext` includes `rpms?: { rpm: string | null; srpm: string | null }` with paths to the built RPM(s).
@@ -101,6 +102,19 @@ Returned `BuildContext` includes `rpms?: { rpm: string | null; srpm: string | nu
 ### `RpmBuilder` class
 
 Same options as `build()`. Emits `message` events with phase and args. Use for multiple builds or progress logging.
+
+## Publishing (GitHub Actions)
+
+The repo includes a workflow that runs on **Release published** and **manual trigger**:
+
+1. **Create a GitHub release** (or run the workflow from the Actions tab).
+2. **Secrets:** In the repo go to **Settings → Secrets and variables → Actions** and add:
+   - **`NPM_TOKEN`** – npm auth token (from [npmjs.com](https://www.npmjs.com/) → Account → Access Tokens → Generate). The workflow publishes to the public npm registry.
+
+To publish to a **private/corporate registry** (e.g. Nexus) instead:
+
+- Add a secret with your registry auth token (e.g. `NEXUS_NPM_TOKEN`).
+- In `.github/workflows/publish.yml`, change the **Setup Node** step to use your registry URL and set `NODE_AUTH_TOKEN` in the publish step to that secret. Optionally remove `--provenance` if your registry doesn’t support it.
 
 ## License
 
