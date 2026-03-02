@@ -39,7 +39,12 @@ jobs:
       - run: npm run build
       - run: npm pack
 
-      - name: Publish to npm (Trusted Publisher / OIDC)
+      - name: Configure npm auth for publish
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
         run: npm publish --provenance --access public --registry https://registry.npmjs.org
 
       - name: Attach tarball to release
