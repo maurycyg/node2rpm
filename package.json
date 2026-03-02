@@ -1,0 +1,33 @@
+{
+  "name": "node2rpm",
+  "version": "1.0.0",
+  "description": "Package Node app into RPM",
+  "type": "module",
+  "main": "dist/rpmbuild.js",
+  "types": "dist/rpmbuild.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/rpmbuild.d.ts",
+      "import": "./dist/rpmbuild.js",
+      "default": "./dist/rpmbuild.js"
+    }
+  },
+  "files": ["dist", "spec"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "pack": "npm run build && npm pack",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "glob": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
