@@ -2,6 +2,7 @@
   "name": "node2rpm",
   "version": "1.0.1",
   "description": "Package Node app into RPM",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maurycyg/node2rpm.git"
