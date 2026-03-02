@@ -1,6 +1,6 @@
 {
   "name": "node2rpm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Package Node app into RPM",
   "license": "MIT",
   "repository": {
