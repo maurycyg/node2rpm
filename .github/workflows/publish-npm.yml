@@ -1,0 +1,56 @@
+# On release creation: run tests, publish to npm, attach tarball to the GitHub release.
+# See: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - run: npm ci
+      - run: npm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm pack
+
+      - name: Configure npm auth for publish
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public --registry https://registry.npmjs.org
+
+      - name: Attach tarball to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: '*.tgz'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
